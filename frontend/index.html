@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle Fuzzy - Data Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌡️ Sistema de Controle Fuzzy para Data Center</h1>
+            <p class="subtitle">Controle Inteligente de Temperatura com Lógica Fuzzy</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Painel de Controle Manual -->
+            <section class="card control-panel">
+                <h2>⚙️ Controle Manual</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="error">Erro (e) [°C]</label>
+                        <input type="number" id="error" step="0.1" value="0" min="-10" max="10">
+                        <small>Diferença entre temperatura desejada e atual</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="deltaError">Variação do Erro (Δe) [°C/min]</label>
+                        <input type="number" id="deltaError" step="0.1" value="0" min="-5" max="5">
+                        <small>Taxa de variação do erro</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalTemp">Temperatura Externa (Text) [°C]</label>
+                        <input type="number" id="externalTemp" step="0.1" value="25" min="15" max="35">
+                        <small>Temperatura ambiente externa</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="thermalLoad">Carga Térmica (Qest) [kW]</label>
+                        <input type="number" id="thermalLoad" step="0.1" value="50" min="0" max="100">
+                        <small>Carga térmica estimada</small>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button id="btnControl" class="btn btn-primary">🚀 Executar Controle</button>
+                    <button id="btnSimulation" class="btn btn-secondary">📊 Rodar Simulação 24h</button>
+                    <button id="btnReset" class="btn btn-tertiary">🔄 Limpar/Resetar</button>
+                    <a href="mqtt_dashboard.html" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">📡 Dashboard MQTT</a>
+                </div>
+            </section>
+
+            <!-- Configuração de Parâmetros -->
+            <section class="card config-panel">
+                <h2>⚙️ Configuração do Sistema</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="setpoint">Setpoint (Temperatura Desejada) [°C]</label>
+                        <input type="number" id="setpoint" step="0.1" value="22.0" min="16" max="32">
+                        <small>Temperatura alvo do sistema</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resultado do Controle -->
+            <section class="card result-panel">
+                <h2>📈 Resultado do Controle</h2>
+                <div class="result-display">
+                    <div class="result-item">
+                        <span class="label">Potência CRAC:</span>
+                        <span id="pCrac" class="value">--</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Erro:</span>
+                        <span id="errorResult" class="value">--</span>
+                        <span class="unit">°C</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Variação do Erro:</span>
+                        <span id="deltaErrorResult" class="value">--</span>
+                        <span class="unit">°C/min</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Regras Ativadas:</span>
+                        <span id="activatedRules" class="value">--</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos de Funções de Pertinência -->
+            <section class="card membership-section">
+                <h2>📊 Funções de Pertinência</h2>
+                <div class="chart-container">
+                    <canvas id="errorChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="deltaErrorChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="tempChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="loadChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="powerChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Regras Ativadas -->
+            <section class="card rules-section">
+                <h2>🔍 Regras Ativadas</h2>
+                <div id="rulesList" class="rules-list">
+                    <p class="empty-message">Execute um controle para ver as regras ativadas</p>
+                </div>
+            </section>
+
+            <!-- Agregação e Defuzzificação -->
+            <section class="card inference-section">
+                <h2>🔄 Processo de Inferência</h2>
+                <div class="inference-content">
+                    <div class="chart-container">
+                        <canvas id="aggregationChart"></canvas>
+                    </div>
+                    <div class="defuzzification-info">
+                        <h3>Defuzzificação (Método do Centroide)</h3>
+                        <div id="defuzzificationDetails" class="defuzz-details">
+                            <p class="empty-message">Execute um controle para ver os detalhes da defuzzificação</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráfico de Simulação 24h -->
+            <section class="card simulation-section">
+                <h2>📉 Simulação 24 Horas</h2>
+                <div class="chart-container large">
+                    <canvas id="simulationChart"></canvas>
+                </div>
+                <div id="simulationStats" class="stats-panel"></div>
+            </section>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
+
