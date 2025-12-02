@@ -258,19 +258,6 @@ O servidor estará disponível em `http://localhost:8000`
 - `GET /api/membership`: Retorna dados das funções de pertinência
 - `GET /api/rules`: Retorna base de regras
 
-### Exemplo de Requisição
-
-```bash
-curl -X POST "http://localhost:8000/api/manual-control" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "error": 2.0,
-    "delta_error": 0.5,
-    "external_temp": 28.0,
-    "thermal_load": 60.0
-  }'
-```
-
 ## 📈 Simulação 24 Horas
 
 A simulação executa 1440 iterações (uma por minuto) com:
@@ -289,32 +276,6 @@ O sistema foi validado através de:
 3. **Simulação 24h**: Validação de comportamento ao longo do tempo
 4. **Testes de integração**: Verificação de comunicação MQTT e API
 
-## 📝 Estrutura de Dados
-
-### Resposta do Controle
-
-```json
-{
-  "p_crac": 65.5,
-  "error": 2.0,
-  "delta_error": 0.5,
-  "activated_rules_count": 15,
-  "activated_rules": [...],
-  "fuzzy_values": {
-    "error": {"NG": 0.0, "NM": 0.0, ...},
-    "delta_error": {...},
-    "external_temp": {...},
-    "thermal_load": {...}
-  },
-  "aggregated_output": {
-    "MB": 0.0,
-    "B": 0.2,
-    "M": 0.5,
-    "A": 0.8,
-    "MA": 0.3
-  }
-}
-```
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -329,23 +290,5 @@ O sistema foi validado através de:
 - **HTML5**: Estrutura semântica
 - **CSS3**: Estilos modernos e responsivos
 - **JavaScript ES6**: Lógica e interatividade
-- **Chart.js**: Gráficos interativos
-
-## 📚 Referências
-
-- Mamdani, E. H. (1974). "Application of fuzzy algorithms for control of simple dynamic plant". Proceedings of the Institution of Electrical Engineers.
-- Zadeh, L. A. (1965). "Fuzzy sets". Information and Control.
-
-## 👥 Autores
-
-Projeto desenvolvido para disciplina de Sistemas Fuzzy.
-
-## 📄 Licença
-
-Este projeto é de uso acadêmico.
-
----
-
-**Versão**: 1.0.0  
-**Última atualização**: 2024
+- **Chart.js**: Gráficos 
 
